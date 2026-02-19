@@ -12,8 +12,10 @@ namespace Shop_mvc_pv421.Extensions
 
         public static T? Get<T>(this ITempDataDictionary tempData, string key) where T : class
         {
-            var item = tempData[key];
-            return item == null ? null : JsonSerializer.Deserialize<T>((string)item);
+            var item = tempData.ContainsKey(key) ? tempData[key] : null;
+            return item is string value ? JsonSerializer.Deserialize<T>(value) : null;
+
+
         }
     }
 }

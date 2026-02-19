@@ -11,7 +11,7 @@ namespace Shop_mvc_pv421.Services
     {
         // TODO: read value from appsettings
         private const string containerName = "images";
-        private readonly string connectionString = null;
+        private readonly string connectionString;
 
         public AzureBlobService(IConfiguration configuration)
         {
@@ -20,6 +20,10 @@ namespace Shop_mvc_pv421.Services
 
         public async Task<string> SaveImage(IFormFile file)
         {
+            if (file == null || file.Length == 0)
+            {
+                throw new ArgumentException("File is empty");
+            }
             var client = new BlobContainerClient(connectionString, containerName);
             await client.CreateIfNotExistsAsync();
             await client.SetAccessPolicyAsync(PublicAccessType.Blob);
@@ -40,25 +44,37 @@ namespace Shop_mvc_pv421.Services
             return blob.Uri.ToString();
         }
 
-        public async Task DeleteProductImageExcept(string?[] exeptFiles)
+        public async Task DeleteProductImageExcept(string?[] exceptFiles)
         {
             var client = new BlobContainerClient(connectionString, containerName);
             var blobs = client.GetBlobs();
 
-            var exeptUrls = exeptFiles.Select(x => Path.GetFileName(x)).ToArray();
+            var exceptUrls = exceptFiles?.Where(x => !string.IsNullOrEmpty(x))
+                .Select(x => Path.GetFileName(x))
+                .ToArray()
+                ?? Array.Empty<string>();
+
 
             foreach (var item in blobs)
             {
-                if (exeptUrls.Contains(item.Name)) continue;
+                if (exceptUrls.Contains(item.Name)) continue;
 
                 var blob = client.GetBlobClient(item.Name);
                 await blob.DeleteIfExistsAsync();
             }
         }
 
-        public Task DeleteImage(string path)
+        public async Task DeleteImage(string path)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(path))
+                return;
+
+            var client = new BlobContainerClient(connectionString, containerName);
+            var fileName = Path.GetFileName(path);
+            var blob = client.GetBlobClient(fileName);
+
+            await blob.DeleteIfExistsAsync();
         }
+
     }
 }

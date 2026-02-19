@@ -30,7 +30,8 @@ namespace Shop_mvc_pv421.Extensions
             const string USERNAME = "admin@ukr.net";
             const string PASSWORD = "Qwer-1234";
 
-            var existingUser = await userManager.FindByNameAsync(USERNAME);
+            var existingUser = await userManager.FindByEmailAsync(USERNAME);
+
 
             if (existingUser == null)
             {
