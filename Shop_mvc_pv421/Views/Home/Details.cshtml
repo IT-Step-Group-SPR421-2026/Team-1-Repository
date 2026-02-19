@@ -1,0 +1,37 @@
+﻿@model Shop_mvc_pv421.Data.Entities.Product
+
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<h2>@Model.Title</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <img class="img-fluid rounded"
+             src="@(Model.ImageUrl ?? "https://thumbs.dreamstime.com/b/no-image-icon-vector-available-picture-symbol-isolated-white-background-suitable-user-interface-element-205805243.jpg")"
+             alt="@Model.Title" />
+    </div>
+
+    <div class="col-md-8">
+        <p><b>Description:</b> @Model.Description</p>
+        <p><b>Category:</b> @(Model.Category?.Name ?? "-")</p>
+
+        @if (Model.Discount > 0)
+        {
+            <p>
+                <b>Price:</b>
+                <span class="text-decoration-line-through">@Model.Price$</span>
+                <span class="ms-1">@((Model.Price * (100 - Model.Discount)) / 100)$</span>
+            </p>
+        }
+        else
+        {
+            <p><b>Price:</b> @Model.Price$</p>
+        }
+
+        <p><b>Quantity:</b> @Model.Quantity</p>
+    </div>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary mt-3">Back</a>

@@ -37,5 +37,17 @@ namespace Shop_mvc_pv421.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            var product = ctx.Products
+                .Include(p => p.Category)
+                .FirstOrDefault(p => p.Id == id);
+
+            if (product == null) return NotFound();
+
+            return View(product);
+        }
     }
 }

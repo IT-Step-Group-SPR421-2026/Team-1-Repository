@@ -1,16 +1,62 @@
 ﻿@model Product
 
-<div class="card h-100">
-    <img src="@Model.ImageUrl" class="card-img-top" alt="Product">
-    <div class="card-body">
-        <h5 class="card-title">@Model.Title</h5>
-        <p class="card-text">@Model.Price$ - @Model.Category?.Name</p>
+<div class="card h-100 shadow-sm">
+
+    <!-- Картинка -->
+    <div class="p-3" style="height: 220px; display:flex; align-items:center; justify-content:center;">
+        <img src="@(Model.ImageUrl ?? "https://thumbs.dreamstime.com/b/no-image-icon-vector-available-picture-symbol-isolated-white-background-suitable-user-interface-element-205805243.jpg")"
+             alt="@Model.Title"
+             style="max-height:100%; max-width:100%; object-fit:contain;" />
     </div>
-    <div class="card-footer">
-        <button type="button" class="btn btn-success">Buy Now</button>
-        <button type="button" class="btn btn-danger">
-            <i class="bi bi-heart-fill"></i>
-        </button>
-        <a asp-controller="Cart" asp-action="Add" asp-route-id="@Model.Id" class="btn btn-primary">Add to Cart</a>
+
+    <div class="card-body d-flex flex-column">
+
+        <!-- Назва = Details -->
+        <h5 class="card-title">
+            <a asp-controller="Home"
+               asp-action="Details"
+               asp-route-id="@Model.Id"
+               class="text-decoration-none fw-bold text-dark">
+                @Model.Title
+            </a>
+        </h5>
+
+        <!-- Ціна -->
+        @if (Model.Discount > 0)
+        {
+            <p>
+                <span class="text-decoration-line-through text-muted">
+                    @Model.Price$
+                </span>
+                <span class="fw-bold text-danger ms-2">
+                    @((Model.Price * (100 - Model.Discount)) / 100)$
+                </span>
+            </p>
+        }
+        else
+        {
+            <p class="fw-bold">@Model.Price$</p>
+        }
+
+        <p class="text-muted">@Model.Category?.Name</p>
+
+        <!-- Кнопки -->
+        <div class="mt-auto d-flex justify-content-between">
+
+            <button class="btn btn-success">Buy Now</button>
+
+            <button class="btn btn-danger">
+                <i class="bi bi-heart-fill"></i>
+            </button>
+
+            <a asp-controller="Cart"
+               asp-action="Add"
+               asp-route-id="@Model.Id"
+               class="btn btn-primary">
+                Add
+            </a>
+
+        </div>
+
     </div>
 </div>
