@@ -4,6 +4,6 @@
     {
         Task<string> SaveImage(IFormFile file);
         Task DeleteImage(string path);
-        Task DeleteProductImageExcept(string?[] exeptFiles);
+        Task DeleteProductImageExcept(string?[] exceptFiles);
     }
 }

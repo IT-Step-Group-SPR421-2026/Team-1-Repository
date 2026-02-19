@@ -6,7 +6,7 @@ namespace Shop_mvc_pv421.Models
     {
         [Required, MinLength(3, ErrorMessage = "Title must has at least 3 characters.")]
         [RegularExpression(@"^[A-Z].*", ErrorMessage = "Title must start with a capital letter.")]
-        public string Title { get; set; }
+        public string Title { get; set; } = String.Empty;
         public IFormFile? Image { get; set; }
 
         public decimal Price { get; set; }

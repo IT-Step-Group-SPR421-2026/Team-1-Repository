@@ -77,15 +77,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
-
 app.UseSession();
+app.UseAuthorization();
 
 app.UseHangfireDashboard();
 
 RecurringJob.AddOrUpdate<ProductService>(
                 "CleanUp Storage",
-                (service) => service.CleanUpProductImages(),
+                service => service.CleanUpProductImages(),
                 Cron.Weekly(DayOfWeek.Monday, 3));
 
 app.MapControllerRoute(

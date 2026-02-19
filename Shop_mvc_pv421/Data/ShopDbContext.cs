@@ -33,6 +33,10 @@ namespace Shop_mvc_pv421.Data
             modelBuilder.SeedCategories();
             modelBuilder.SeedProducts();
 
+
+            modelBuilder.Entity<Product>().Property(p => p.Price).HasPrecision(18, 2);
+
+
             // TODO: move to separate class
             modelBuilder.Entity<OrderDetails>().HasOne(x => x.Order).WithMany(x => x.Items).HasForeignKey(x => x.OrderId);
             modelBuilder.Entity<OrderDetails>().HasOne(x => x.Product).WithMany(x => x.Orders).HasForeignKey(x => x.ProductId);
